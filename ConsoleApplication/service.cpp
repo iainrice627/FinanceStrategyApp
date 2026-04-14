@@ -355,6 +355,11 @@ double Service::CalculateNewStockPrice(std::string chosenStock, double userPerce
 
     latestStock.current_value = newStockPrice;
 
+    // need to re update the dictionary value. 
+
+    UpdateCurrentValue(dictionary, newStockPrice, chosenStock);
+    
+    // make sure the stock item in this method, gets to the portfolio.
     portfolio.SetStockAt(latestIndex, latestStock);
 
     return newStockPrice;
@@ -427,7 +432,7 @@ std::string Service::SelectClient() {
 }
 
 
-double GetPrice(Dictionary& dictionary, std::string chosenStock) {
+static double GetPrice(Dictionary& dictionary, std::string chosenStock) {
 
     auto item = dictionary.find(chosenStock);
     if (item != dictionary.end()) {
@@ -441,6 +446,23 @@ double GetPrice(Dictionary& dictionary, std::string chosenStock) {
     }
 
     
+
+}
+
+static void UpdateCurrentValue(Dictionary& dictionary, double newStockPrice, std::string chosenStock) {
+
+    auto item = dictionary.find(chosenStock);
+    if (item != dictionary.end()) {
+
+        item->second = newStockPrice;
+        
+    }
+    else {
+        std::cout << "Stock '" << chosenStock << "' not found in dictionary.\n";
+        
+    }
+
+
 
 }
 
