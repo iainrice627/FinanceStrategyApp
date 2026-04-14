@@ -6,8 +6,10 @@
 #include "validation.h"
 
 
-std::map<std::string, double> Menu::StocksAndValues;
+//std::map<std::string, double> Menu::stocksAndValues;
+using Dictionary = std::map<std::string, double>;
 
+Dictionary Menu::stocksAndValues;
 
 void Menu::DisplayMenuOptions()
 
@@ -256,7 +258,7 @@ void Menu::LoadDictionary(Portfolio& portfolio) {
 
 	while ((row = mysql_fetch_row(result)) != NULL) {
 	
-		StocksAndValues[row[0]] = atof(row[1]);
+		stocksAndValues[row[0]] = atof(row[1]);
 	
 	}
 
@@ -270,7 +272,7 @@ void Menu::LoadDictionary(Portfolio& portfolio) {
 bool Menu::CheckStockList(std::string userChosenStock) {
 
 
-	for (auto it : StocksAndValues) {
+	for (auto it : stocksAndValues) {
 
 		if (it.first != userChosenStock) {
 
@@ -283,6 +285,13 @@ bool Menu::CheckStockList(std::string userChosenStock) {
 			}
 
 	}
+
+}
+
+
+Dictionary& Menu::GetStocksandValues() {
+
+	return stocksAndValues;
 
 
 

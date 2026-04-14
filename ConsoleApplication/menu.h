@@ -15,7 +15,7 @@ private:
 	//static std::string stocksList[capacity];
 	//static int size;
 
-	static std::map<std::string, double> StocksAndValues;
+	static std::map<std::string, double> stocksAndValues;
 
 
 public:
@@ -30,10 +30,10 @@ public:
 	static bool Option4(Portfolio& portfolio);
 	static bool Option5(Portfolio& portfolio);
 	static void DisplayStockList();
-	//static void LoadStockList();
 	static void LoadDictionary(Portfolio& portfolio);
 	static bool CheckStockList(std::string userChosenStock);
-
+	//static std::map<std::string,double> GetStocksandValues();
+	static Dictionary& GetStocksandValues();
 
 
 

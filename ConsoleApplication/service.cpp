@@ -4,6 +4,7 @@
 #include "stock.h"
 #include "stack.h"
 #include "portfolio.h"
+#include "menu.h"
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -314,17 +315,14 @@ std::string Service::GenerateStockID(std::string name, std::string clientID, std
 
 double Service::CalculateNewStockPrice(std::string chosenStock, double userPercentChoice, Portfolio& portfolio) {
 
-    std::cout << "Address of portfolio: " << &portfolio << "\n";
-
+   
     int size = portfolio.GetSizePortfolio();
     
     Stack<int>stocksIndices(size);
 
     for (int i = 0; i < size; ++i) {
 
-        Stock stock = portfolio.AccessSpecificStock(i); // this only works if there is another stock int he lit but what if not. we still need previous price, to calcultare new price. so we need to find old price from other client info OR have storage of old prices per stock in a list that it gets upated.MEnu has stock list of name. can we add their purchase price and current value too? and update this and let the stocks update themselved from this list.
-
-        std::cout << "Client ID = " << stock.clientID << std:: endl;
+        Stock stock = portfolio.AccessSpecificStock(i);
 
         if(stock.name == chosenStock){
 
@@ -344,7 +342,12 @@ double Service::CalculateNewStockPrice(std::string chosenStock, double userPerce
     
     Stock latestStock = portfolio.AccessSpecificStock(latestIndex);  
 
-    double basePrice = latestStock.price_of_purchase;
+
+    //double basePrice = latestStock.price_of_purchase;
+
+    Menu::GetStocksandValues()
+    
+    double basePrice = Menu::GetStocksandValues()// the double in the dictionary that matches key value. 
 
     double newStockPrice = basePrice + (basePrice * (userPercentChoice / 100.0));
 

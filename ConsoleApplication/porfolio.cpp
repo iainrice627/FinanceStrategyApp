@@ -76,13 +76,13 @@ void Portfolio:: DisplayPortfolio()
 
 void Portfolio:: RemoveStock(int index) {
 
-	if (index != -1) {  // if index has been found then this will not be -1, if index still not ofund then this will still be -1. 
+	if (index != -1) {  
 
-		for (int i = index; i < size - 1; ++i) {   // we make j the point of our index. so we iterate the list from there and then -1 to soze so its smaller and continue through list. if we have our index.
-			portfolio_stocks[i] = portfolio_stocks[i + 1];  // you replace the object at index eg. 10 with the object from index 11. It does not move to index 11. every object then is reinitilaised like this by the one nect to it. 10 is lost. but at the end we have a gap.
+		for (int i = index; i < size - 1; ++i) {  
+			portfolio_stocks[i] = portfolio_stocks[i + 1];  
 		}
 
-		portfolio_stocks[size - 1] = Stock();  //creating an empty object at this location becasue now a gap sicne moved everything back
+		portfolio_stocks[size - 1] = Stock();   
 		size--;
 	}
 
