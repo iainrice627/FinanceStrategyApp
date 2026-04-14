@@ -49,6 +49,7 @@ void Portfolio:: DisplayPortfolio()
 	UpdateNetGainsLossValue();
 	UpdateTotalSpent();
 
+
 	std::cout << std::endl;
 	std::cout << "CLIENT PORTFOLIO: " << clientID <<std::endl;
 	std::cout << std::endl;
@@ -64,7 +65,7 @@ void Portfolio:: DisplayPortfolio()
 		
 		Stock stock = portfolio_stocks[i];
 
-		std::cout << stock.stockID << " | " << stock.name << " | " << stock.number_of_shares << " | " << stock.date_of_purchase << " | " << stock.price_of_purchase << " | " << stock.current_value << std::endl;
+		std::cout << stock.stockID << " | " << stock.name << " | " << stock.number_of_shares << " | " << stock.date_of_purchase << " | " << stock.price_of_purchase << " | " << stock.current_value << " | " << stock.clientID << std::endl;
 		
 	}
 
@@ -156,26 +157,19 @@ void Portfolio::UpdateNetGainsLossValue() {
 
 }
 
-void Portfolio::UpdateCredit() {
 
-	// already have add and deduct credit. in sell and buy methods.
+void Portfolio::UpdateCurrentValueStock(double newStockPrice, std::string chosenStock) {
 
-	//where will credit be intialised? when client is made? in client List? in client object?
-	//when we build the porfolio, we get the clientId from a list, we get stocks and calcute other fields form there, but credit exists before any stock does and can change with no change to the portfolio. cant depend on prtofoli values.
-	//when we have a new client - credit is added. credit can be added at other times.  and then deducted when we buy. and added to when we sell.
-	// if there was a menu option to add credit or withdraw - how do we track this value? portfolio gets its stocks from a bit list. we need another source for credit and initalise a member field credit on each load.
-	//service method to load credit.  need to know client. we load the list of stocks, then load the available credit. update during events. save to the source. 
+	for (int i =0; i < size; ++i) {
 
-}
+		if (portfolio_stocks[i].name == chosenStock) {
+			portfolio_stocks[i].current_value = newStockPrice;
+		}
 
-void Portfolio::UpdateCurrentValueStock(double newStockPrice) {
+	}
 
-	// when we input new % value we change the current value. when being bought or sold, the new price = current valiiue of current stock, but we need to also call all the stocks.
-	//this method needs called when that value is accepted.
-	// this can be changed but will only change current value of this clients amazon stodks. not an other clients amozaon stocks. so this % chnage really needs to happen automatically on the database when prices chnage live.
-	//if we save the portfolio we wiil haev text file with all the stocks of same type across other clients that haev differnt values, for same stock. the value shoudl be global.  it shoudl be shared.
-	 
-	//this method needs to access all the stocks of this name in portfolio and chnage all their current value to the new one.
+
+
 
 }
 
@@ -202,7 +196,7 @@ void Portfolio::SellEarliest(std::string chosenStock, double newStockPrice)
 	Stock stock = portfolio_stocks[index];
 	double profit = stock.current_value - stock.price_of_purchase;
 	std::cout << "The oldest stock of " << stock.name << ", with " << stock.number_of_shares << " shares, has been sold for " << stock.current_value << ", with a net gain of " << profit << "." << std::endl;
-	UpdateCurrentValueStock(newStockPrice);
+	UpdateCurrentValueStock(newStockPrice, chosenStock);
 	UpdatePortfolioValue();
 	AddCreditValue(newStockPrice);
 	RemoveStock(index);
@@ -233,7 +227,7 @@ void Portfolio::SellLatest(std::string chosenStock, double newStockPrice)
 	Stock stock = portfolio_stocks[index];
 	double profit = stock.current_value - stock.price_of_purchase;
 	std::cout << "The most recent stock of " << stock.name << ", with " << stock.number_of_shares << " shares, has been sold for " << stock.current_value << ", with a net gain of " << profit << "." << std::endl;
-	UpdateCurrentValueStock(newStockPrice);
+	UpdateCurrentValueStock(newStockPrice, chosenStock);
 	UpdatePortfolioValue();
 	AddCreditValue(newStockPrice);
 	RemoveStock(index);
@@ -248,6 +242,7 @@ void Portfolio:: Buy(std::string chosenStock, double newStockPrice)
 	
 	int number_of_shares;
 	int numShares = 0;
+	std::string clientID = GetClientID();
 
 	while(numShares == 0) {
 
@@ -261,7 +256,7 @@ void Portfolio:: Buy(std::string chosenStock, double newStockPrice)
 	Stock stock = Service::CreateStock(chosenStock, numShares, newStockPrice, clientID);
 	AddStock(stock);
 	DeductCreditValue(newStockPrice);
-	UpdateCurrentValueStock(newStockPrice);
+	UpdateCurrentValueStock(newStockPrice, chosenStock);
 	double pricePerShare =  stock.number_of_shares / stock.price_of_purchase;
 	std::cout << std::endl;
 	std::cout << stock.number_of_shares << " shares of stock " << stock.name << " has been bought for " << stock.price_of_purchase << " at " << pricePerShare << " per share." << std::endl;

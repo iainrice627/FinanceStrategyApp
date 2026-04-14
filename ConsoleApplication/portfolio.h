@@ -51,8 +51,7 @@ public:
 	void UpdatePortfolioValue();
 	void UpdateNetGainsLossValue();
 	void UpdateTotalSpent();
-	void UpdateCredit();
-	void UpdateCurrentValueStock(double newStockPrice);
+	void UpdateCurrentValueStock(double newStockPrice, std::string chosenStock);
 	void DeductCreditValue(double newStockPrice);
 	void AddCreditValue(double salePrice);
 	

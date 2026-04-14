@@ -9,6 +9,13 @@
 #include <sstream>
 #include "validation.h"
 #include <vector>
+#include <mysql.h>
+
+
+
+
+
+
 
 
 Stock Service::CreateStock(std::string name, int number_of_shares, double price_of_purchase, std::string clientID) {
@@ -71,22 +78,191 @@ void Service::LoadPortfolio(Portfolio& portfolio) {
 
 
 
-void Service::SavePortfolio(Portfolio& portfolio) {
 
-    //save the portfoliolist to the database of the other records.
-    //there will already be records for this record but there now may be edits and new stocks with the client id to add. we want to overwrite any existing ones with our ones, but only with this client id, and then add to the end any new ones.
-    //we probably need to read the file first, and compare the two things. the list in the program and the contents of this while text file.
-    //where are the record that have this client ID, what lines in the text file are they in. i can use stock id to pair ones in program to text file.
-    // copy the stockIDs from program file and overwrite the lines that have the same stockID.
-    // if there are new stockIDs in the porgram file, that are not in the text file, then add to the bottom of the text file in empty lines.
 
-    // you can then create a copy bu creating a new thing fout. and a textcopy . fout.open copything will create a file if its not there.
-    //instead of fin.get(ch); to get the characters.its fout.put(ch); to put each character in.
+MYSQL* Service::ConnectToDatabase(Portfolio& portfolio) {
+
+    std::string clientID = portfolio.GetClientID();
+    std::string password;
+    std::cout << std::endl;
+    std::cout << "Enter the password for the database: " << std::endl;
+    std::cin >> password;
+
+    MYSQL* connection = mysql_init(NULL);
+
+    if (connection == NULL) {
+
+        std::cout << "Connection1 failed: " << mysql_error(connection) << std::endl;
+        mysql_close(connection);
+        return nullptr;
+
+    }
+
+    if (mysql_real_connect(connection, "localhost", "root", password.c_str(), NULL, 0, NULL, 0) == NULL) {
+
+        std::cout << "Connection2 failed: " << mysql_error(connection) << std::endl;
+        mysql_close(connection);
+        return nullptr;
+
+    }
+
+    return connection;
+
+
 
 
 }
 
 
+void Service::LoadPortfolioSQL2(Portfolio& portfolio) {
+
+	MYSQL* connection = ConnectToDatabase(portfolio);
+
+    std::string clientID = portfolio.GetClientID();
+
+    if (mysql_query(connection, "USE Portfoliodb") != 0) {
+        std::cout << "SQL USE command failed: " << mysql_error(connection) << std::endl;
+        mysql_close(connection);
+        return;
+    }
+
+    std::string query = "SELECT stocksID, name, number_of_shares, date_of_purchase, price_of_purchase, current_value, clientID " "FROM stocks WHERE clientID = '" + clientID + "'";
+
+    if (mysql_query(connection, query.c_str()) != 0) {
+        std::cout << "SELECT failed: " << mysql_error(connection) << "\n";
+        mysql_close(connection);
+        return;
+
+    }
+
+    MYSQL_RES* result = mysql_store_result(connection);
+
+    if (result == nullptr) {
+        std::cout << " No result set: " << mysql_error(connection) << std::endl;
+        mysql_close(connection);
+        return;
+
+    }
+
+    MYSQL_ROW row;
+
+
+    while ((row = mysql_fetch_row(result)) != NULL) {   //Always fetch and test in the same while condition:
+
+        Stock stock;
+
+        stock.stockID = row[0];
+        stock.name = row[1];
+        stock.number_of_shares = atoi(row[2]);
+        stock.date_of_purchase = row[3];
+        stock.price_of_purchase = atof(row[4]);
+        stock.current_value = atof(row[5]);
+        stock.clientID = row[6];
+
+        portfolio.AddStock(stock);
+
+    }
+
+    mysql_free_result(result);
+    mysql_close(connection);
+
+
+}
+
+
+
+void Service::SavePortfolioSQL2(Portfolio& portfolio) {
+
+    MYSQL* connection = ConnectToDatabase(portfolio);
+
+    //use connection and identify correct database.
+    if (mysql_query(connection, "USE Portfoliodb") != 0) {
+        std::cout << "SQL USE command failed: " << mysql_error(connection) << std::endl;
+        mysql_close(connection);
+        return;
+    }
+    
+    
+    //acces the list
+     Stock* portfolioList = portfolio.GetPortfolioStocks();
+
+     //  get the portfolio size  
+     int size = portfolio.GetSizePortfolio();
+
+     // get clientID
+     std::string clientID = portfolio.GetClientID();
+
+    
+
+     //get a stock object, pass in its value to the stream, convert stream to string. send stream to database 
+     for (int i = 0; i < size; ++i) {
+
+         Stock stock = portfolioList[i];
+
+         //check if the object is not in the database. then call insert for this object.
+
+         std::string query1 = "SELECT stocksID FROM stocks WHERE stocksID = '" + stock.stockID + "'";
+
+         if (mysql_query(connection, query1.c_str()) != 0) {
+
+             std::cout << "SELECT failed: " << mysql_error(connection) << "\n";
+             return;
+            
+         }
+
+         MYSQL_RES* result = mysql_store_result(connection);
+         bool exists = (mysql_num_rows(result) > 0);
+         mysql_free_result(result);
+
+         if (exists) {
+         
+         //update
+             
+             std::ostringstream oss;
+
+             oss << "UPDATE stocks SET number_of_shares = '" << stock.number_of_shares << "', current_value = '" << stock.current_value << "' WHERE clientID = '" << stock.clientID << "' AND stocksID = '" << stock.stockID << "';";
+
+             std::string query = oss.str();
+
+             if (mysql_query(connection, query.c_str()) != 0) {
+                 std::cout << "UPDATE failed: " << mysql_error(connection) << "\n";
+                 mysql_close(connection);
+                 return;
+
+             }
+             oss.str("");
+             oss.clear();
+         
+         }
+
+         else {
+         
+         //insert
+
+             std::ostringstream oss;
+
+             oss << "INSERT INTO stocks (stocksID, name, number_of_shares, date_of_purchase, price_of_purchase, current_value, clientID) VALUES ("<< "'" << stock.stockID << "', "<< "'" << stock.name << "', "<<stock.number_of_shares << ", "<< "'" << stock.date_of_purchase << "', "<< stock.price_of_purchase << ", "<< stock.current_value << ", " << "'" << clientID << "');";
+
+             std::string query = oss.str();
+
+             if (mysql_query(connection, query.c_str()) != 0) {
+                 std::cout << "INSERT failed: " << mysql_error(connection) << "\n";
+                 mysql_close(connection);
+                 return;
+             }
+             oss.str("");
+             oss.clear();
+
+         }
+      
+
+     }
+
+     std::cout << "DB updated. Closing connection" << std::endl;
+     mysql_close(connection);
+
+    
+}
 
 
 std::string Service::DateTime(time_t time, const char* format)
@@ -136,9 +312,9 @@ std::string Service::GenerateStockID(std::string name, std::string clientID, std
 }
 
 
-double Service::CalculateNewStockPrice(std::string chosenStock, int userPercentChoice, Portfolio& portfolio) {
+double Service::CalculateNewStockPrice(std::string chosenStock, double userPercentChoice, Portfolio& portfolio) {
 
-  
+    std::cout << "Address of portfolio: " << &portfolio << "\n";
 
     int size = portfolio.GetSizePortfolio();
     
@@ -146,7 +322,9 @@ double Service::CalculateNewStockPrice(std::string chosenStock, int userPercentC
 
     for (int i = 0; i < size; ++i) {
 
-        Stock stock = portfolio.AccessSpecificStock(i); 
+        Stock stock = portfolio.AccessSpecificStock(i); // this only works if there is another stock int he lit but what if not. we still need previous price, to calcultare new price. so we need to find old price from other client info OR have storage of old prices per stock in a list that it gets upated.MEnu has stock list of name. can we add their purchase price and current value too? and update this and let the stocks update themselved from this list.
+
+        std::cout << "Client ID = " << stock.clientID << std:: endl;
 
         if(stock.name == chosenStock){
 

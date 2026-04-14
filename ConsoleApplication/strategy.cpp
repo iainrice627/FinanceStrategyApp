@@ -17,6 +17,11 @@ void Strategy:: Strategy1(double userPercentChoice, std::string chosenStock, Por
 			portfolio.SellEarliest(chosenStock, newStockPrice);
 			
 		}
+		else {
+			std::cout << "No trading has taken place." << std::endl;
+			portfolio.UpdateCurrentValueStock(newStockPrice, chosenStock);
+
+		}
 
 	}
 
@@ -34,11 +39,15 @@ void Strategy:: Strategy1(double userPercentChoice, std::string chosenStock, Por
 			portfolio.SellLatest(chosenStock, newStockPrice);
 			
 		}
+		else {
+			std::cout << "No trading has taken place." << std::endl;
+			portfolio.UpdateCurrentValueStock(newStockPrice, chosenStock);
+		}
+			
 
 	}
 
-	else
-		std::cout << "No trading has taken place." << std::endl;
+	
 
 };
 

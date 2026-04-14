@@ -16,9 +16,8 @@ int main()
 
 	Portfolio portfolio(clientID);
 
-	Service::LoadPortfolio(portfolio);
-	Menu::LoadStockList();
-
+	Service::LoadPortfolioSQL2(portfolio);
+	Menu::LoadDictionary(portfolio);
 
 	while (true) {
 		try {

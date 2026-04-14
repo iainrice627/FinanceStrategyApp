@@ -5,8 +5,10 @@
 #include "strategy.h"
 #include "validation.h"
 
-std::string Menu::stocksList[Menu::capacity];
-int Menu::size = 0;
+//std::string Menu::stocksList[Menu::capacity];
+//int Menu::size = 0;
+std::map<std::string, double> Menu::StocksAndValues;
+
 
 void Menu::DisplayMenuOptions()
 
@@ -86,25 +88,46 @@ bool Menu::DetermineAction(int selection, Portfolio& portfolio) {
 
 }
 
+//void Menu::DisplayStockList() {
+//
+//	std::cout << std::endl;
+//	std::cout << "List of available Stocks to purchase and sell." << std::endl;
+//	std::cout << std::endl;
+//
+//	for (int i = 0; i < size; i++) {
+//		
+//		std::string name = stocksList[i];
+//		std::cout << name << std::endl;
+//
+//	}
+//}
 void Menu::DisplayStockList() {
+
 
 	std::cout << std::endl;
 	std::cout << "List of available Stocks to purchase and sell." << std::endl;
 	std::cout << std::endl;
 
-	for (int i = 0; i < size; i++) {
-		
-		std::string name = stocksList[i];
-		std::cout << name << std::endl;
+	for (auto it : StocksAndValues) {
+
+		std::cout << it.first << ": " << it.second << std:: endl;
 
 	}
+
+
 }
+
+
 
 bool Menu::Option1(Portfolio& portfolio)
 {
+
+	std::cout << "Address of portfolio in Menu: " << &portfolio << "\n";
+
+
 	std::cout << std::endl;
 	std::cout << "This program does not automatically change the value of stocks by listening to a live feed of updated stock prices. To determine your strategy you should enter your stock and the change of value, as a % from the last price." << std::endl;
-	std::cout << "For example: You need to know 1) the price this program holds for the stock. 2)know the new proce, 3) calculate the % change and 4) input that percentage chnage when prompted." << std::endl;
+	std::cout << "For example: You need to know 1) the price this program holds for the stock. 2)know the new prIce, 3) calculate the % change and 4) input that percentage chnage when prompted." << std::endl;
 	std::cout << std::endl;
 	//we should insert the new value of the stock and automatically workout the percetnage chnange rther than insert the percentage change.
 	std::cout << "See a list of the available stocks."  << std::endl;
@@ -163,7 +186,8 @@ bool Menu::Option5(Portfolio& portfolio)
 
 {
 
-	Service::SavePortfolio(portfolio);
+	/*Service::SavePortfolio(portfolio);*/
+	Service::SavePortfolioSQL2(portfolio);
 
 	std::cout << std::endl;
 	std::cout << "Logging Out User and Reloading login page" << std::endl;
@@ -172,53 +196,96 @@ bool Menu::Option5(Portfolio& portfolio)
 }
 
 
-void Menu::LoadStockList() {
+//void Menu::LoadStockList() {
+//
+//	
+//	std::ifstream stockListFile;
+//	
+//	stockListFile.open("stockList.txt");
+//
+//	if (stockListFile.is_open()) {
+//
+//		std::string lines;
+//
+//		while (getline(stockListFile, lines)) {
+//			if (size >= capacity) {
+//				std::cerr << "Stock list exceeds 100 entries\n";
+//				break;
+//			}
+//			stocksList[size] = lines;
+//			size++;
+//
+//		}
+//
+//	}
+//	
+//	stockListFile.close();
+//
+//}
+
+void Menu::LoadDictionary(Portfolio& portfolio) {
+
+	MYSQL* connection = Service::ConnectToDatabase(portfolio);
 
 	
-	std::ifstream stockListFile;
-	
-	stockListFile.open("stockList.txt");
 
-	if (stockListFile.is_open()) {
+	if (mysql_query(connection, "USE Portfoliodb") != 0) {
+		std::cout << "SQL USE command failed: " << mysql_error(connection) << std::endl;
+		mysql_close(connection);
+		return;
+	}
 
-		std::string lines;
+	std::string query = "SELECT stockName, value FROM stocksvalue;";
 
-		while (getline(stockListFile, lines)) {
-			if (size >= capacity) {
-				std::cerr << "Stock list exceeds 100 entries\n";
-				break;
-			}
-			stocksList[size] = lines;
-			size++;
-
-		}
+	if (mysql_query(connection, query.c_str()) != 0) {
+		std::cout << "SELECT failed: " << mysql_error(connection) << "\n";
+		mysql_close(connection);
+		return;
 
 	}
+
+	MYSQL_RES* result = mysql_store_result(connection);
+
+	if (result == nullptr) {
+		std::cout << " No result set: " << mysql_error(connection) << std::endl;
+		mysql_close(connection);
+		return;
+
+	}
+
+	MYSQL_ROW row;
+
+	while ((row = mysql_fetch_row(result)) != NULL) {
 	
-	stockListFile.close();
+		StocksAndValues[row[0]] = atof(row[1]);
+	
+	}
+
+	mysql_free_result(result);
+	mysql_close(connection);
+
 
 }
 
 
-
-
 bool Menu::CheckStockList(std::string userChosenStock) {
 
-	for(int i = 0; i < size; ++i) {
 
-		if (stocksList[i] != userChosenStock) {
+	for (auto it : StocksAndValues) {
+
+		if (it.first != userChosenStock) {
 
 			//do nothing
-		}
+			}
 
-		else {
+			else {
 
-			return true;
-		}
+					return true;
+			}
 
 	}
 
-	return false;
+
 
 }
 
