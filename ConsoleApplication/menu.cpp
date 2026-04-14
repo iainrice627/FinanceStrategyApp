@@ -5,8 +5,7 @@
 #include "strategy.h"
 #include "validation.h"
 
-//std::string Menu::stocksList[Menu::capacity];
-//int Menu::size = 0;
+
 std::map<std::string, double> Menu::StocksAndValues;
 
 
