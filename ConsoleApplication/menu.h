@@ -6,6 +6,8 @@
 #include "portfolio.h"
 #include "service.h"
 
+//std::map<std::string, double> Menu::stocksAndValues;
+using Dictionary = std::map<std::string, double>;
 
 class Menu {
 

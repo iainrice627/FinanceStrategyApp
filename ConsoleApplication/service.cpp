@@ -344,10 +344,12 @@ double Service::CalculateNewStockPrice(std::string chosenStock, double userPerce
 
 
     //double basePrice = latestStock.price_of_purchase;
-
-    Menu::GetStocksandValues()
     
-    double basePrice = Menu::GetStocksandValues()// the double in the dictionary that matches key value. 
+    Dictionary dictionary = Menu::GetStocksandValues();
+
+    //find the stock in the dictinoary
+
+    double basePrice = GetPrice(dictionary, chosenStock);
 
     double newStockPrice = basePrice + (basePrice * (userPercentChoice / 100.0));
 
@@ -421,6 +423,24 @@ std::string Service::SelectClient() {
 
     return clientID;
 
+
+}
+
+
+double GetPrice(Dictionary& dictionary, std::string chosenStock) {
+
+    auto item = dictionary.find(chosenStock);
+    if (item != dictionary.end()) {
+
+        double basePrice = item->second;
+        return basePrice;
+    }
+    else {
+        std::cout << "Stock '" << chosenStock << "' not found in dictionary.\n";
+        return;
+    }
+
+    
 
 }
 

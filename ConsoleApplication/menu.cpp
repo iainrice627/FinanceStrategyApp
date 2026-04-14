@@ -6,8 +6,7 @@
 #include "validation.h"
 
 
-//std::map<std::string, double> Menu::stocksAndValues;
-using Dictionary = std::map<std::string, double>;
+
 
 Dictionary Menu::stocksAndValues;
 
