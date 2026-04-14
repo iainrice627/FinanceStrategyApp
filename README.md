@@ -15,8 +15,6 @@ The fundamentals have been completed, hwoever there is a list of jobs to complet
 
 #To do
 
-TO DO
-
 new code - when change value of stock not in porfolio - read file find all stocks name and get most recent current value. use to create new proce. read file and change write over the part of current value with new price.
 create randomID numner for Id gnerator and insert random number code into stockID
 update Regex for stockID
@@ -30,9 +28,24 @@ create option 3 practice feature.
 change the whole insert percentage change and use a way to get live change in prices of real prices.- turning the feature into a webapplication.
 change the get date and time to prevent dates above 31 days or in the future.
 review validation of constuctors
-
 create and run test project mehtods.
-
 consider a better GUI. - turn into a GUI using some framwork eg .NET
-
 replace text files with a SQL database.  
+
+#update 
+
+Problems - no updates on current value happening. not impacting the saved values in text files.
+Actions -inserted code to access a MySQL database - kept on local harddrive for now. Also using a dictionary to store the lsits of stocks and included their value per share and kept in Menu class.
+Intention is to use the dictionary to get calues, calcualte sales and buys prices from the values and ensure the update methods pass values and not 0's
+
+#To do
+
+contonue to repair the calcualte and update values for all the stocks in runtime and in database, when values are changed.
+update the client login so a input that doesnt match list is not accepted. 
+create the login and password feature using the client list and somehow passwords (gernally figure out user authentication)
+create a back feature to exit an option at any point to return to menu.
+create option 3 practice feature.
+change the whole insert percentage change and use a way to get live change in prices of real prices.- turning the feature into a webapplication.
+change the get date and time to prevent dates above 31 days or in the future.
+create and run test project mehtods.
+consider a better GUI. - turn into a GUI using some framwork eg .NET
