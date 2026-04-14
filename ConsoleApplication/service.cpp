@@ -412,21 +412,32 @@ std::string Service::DisplayClients() {
     }
 
     std::cout << std::endl;
-    std::string selection = Service::SelectClient();
+    std::string selection = Service::SelectClient(clients, size);
 
     return selection;
 
 }
 
-std::string Service::SelectClient() {
+std::string Service::SelectClient(std::vector<std::string> clients, int size) {
 
     std::string clientID;
 
     std::cin >> clientID;
 
-    //validation of user input.
+    for (int i = 0; i < size; ++i) {
 
-    return clientID;
+        if (clients[i] == clientID) {
+
+            return clientID;
+        }
+
+
+    }
+
+    std::cout << "ERROR: ClientID inputed is InValid." << std::endl;
+    return;
+
+   
 
 
 }

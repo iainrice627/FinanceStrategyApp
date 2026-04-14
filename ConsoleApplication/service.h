@@ -26,7 +26,7 @@ public:
 	static void SavePortfolioSQL2(Portfolio& portfolio);
 	static std::vector<std::string> GetClients();
 	static std::string DisplayClients();
-	static std::string SelectClient();
+	static std::string SelectClient(std::vector<std::string> clients, int size);
 
 
 };
