@@ -40,7 +40,7 @@ Intention is to use the dictionary to get calues, calcualte sales and buys price
 
 #To do
 
-contonue to repair the calcualte and update values for all the stocks in runtime and in database, when values are changed.
+continue to repair the calcualte and update values for all the stocks in runtime and in database, when values are changed.
 update the client login so a input that doesnt match list is not accepted. 
 create the login and password feature using the client list and somehow passwords (gernally figure out user authentication)
 create a back feature to exit an option at any point to return to menu.
