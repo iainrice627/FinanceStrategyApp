@@ -5,7 +5,9 @@
 #include <iostream>
 #include "portfolio.h"
 #include <vector>
-
+//#include "menu.h"
+#include <map>
+using Dictionary = std::map<std::string, double>;
 
 
 
@@ -27,6 +29,8 @@ public:
 	static std::vector<std::string> GetClients();
 	static std::string DisplayClients();
 	static std::string SelectClient(std::vector<std::string> clients, int size);
+	static double GetPrice(Dictionary& dictionary, std::string chosenStock);
+	static void UpdateCurrentValue(Dictionary& dictionary, double newStockPrice, std::string chosenStock);
 
 
 };

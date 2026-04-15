@@ -4,6 +4,7 @@
 #include "menu.h"
 #include "strategy.h"
 #include "validation.h"
+#include "service.h"
 
 
 
@@ -101,6 +102,7 @@ bool Menu::DetermineAction(int selection, Portfolio& portfolio) {
 //
 //	}
 //}
+
 void Menu::DisplayStockList() {
 
 
@@ -108,7 +110,7 @@ void Menu::DisplayStockList() {
 	std::cout << "List of available Stocks to purchase and sell." << std::endl;
 	std::cout << std::endl;
 
-	for (auto it : StocksAndValues) {
+	for (auto it : stocksAndValues) {
 
 		std::cout << it.first << ": " << it.second << std:: endl;
 
@@ -134,9 +136,14 @@ bool Menu::Option1(Portfolio& portfolio)
 	std::cout << std::endl;
 	DisplayStockList();
 	std::cout << std::endl;
-	std::string userChosenStock;
+
+	/// memeory errror. corruption of userChosenStock happening in and around cin. comeing out wrong. _Ptr is overwritten with the bytes "AMZN"
+
+	std::string userChosenStock = "";
 	std::cout <<"Enter the name of an available stock." << std::endl;
 	std::cin >> userChosenStock;
+
+
 	std::string chosenStock = Validation::ValidStock(userChosenStock);
 	std::cout << "Enter the 'change in value' as a percantage(%), of your chosen stock. eg 1.0, 0.5, -1.5, 20.0, -20.0 etc.  " << std::endl;
 	double userPercentChoice = Validation::GetDouble();
@@ -268,24 +275,34 @@ void Menu::LoadDictionary(Portfolio& portfolio) {
 }
 
 
+//bool Menu::CheckStockList(std::string userChosenStock) {
+//
+//
+//	for (auto it : stocksAndValues) {
+//
+//		if (it.first != userChosenStock) {
+//
+//			//do nothing
+//			}
+//
+//			else {
+//
+//					return true;
+//			}
+//
+//	}
+//
+//}
+
 bool Menu::CheckStockList(std::string userChosenStock) {
-
-
 	for (auto it : stocksAndValues) {
-
-		if (it.first != userChosenStock) {
-
-			//do nothing
-			}
-
-			else {
-
-					return true;
-			}
-
+		if (it.first == userChosenStock) {
+			return true;
+		}
 	}
-
+	return false;
 }
+
 
 
 Dictionary& Menu::GetStocksandValues() {

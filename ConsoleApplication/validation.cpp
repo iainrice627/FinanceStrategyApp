@@ -166,7 +166,8 @@ int Validation::ValidNumberOfShares(int number_of_shares, std::string chosenStoc
 			std::cout << std::endl;
 			std::cout << "This prgoram prevents purchases that make stock ownership beyond 10% of this portfolio." << std::endl;
 			std::cout << "Your order would make " << chosenStock << " " << percentagePortfolio << "% of your whole portfolio." << std::endl;
-			return number_of_shares == 0;
+			/*return number_of_shares == 0;*/
+			return  0;
 
 		}
 

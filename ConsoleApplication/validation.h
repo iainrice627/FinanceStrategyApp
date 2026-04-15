@@ -25,14 +25,8 @@ public:
 	static int GetInterger();
 	static double CheckPurchaseAsPercentageofPortfolio(int number_of_shares, std::string chosenStock, Portfolio& portfolio);
 	static void StockConstructor(std::string name, int number_of_shares, double price_of_purchase);
-	static void PortfolioConstructor(int size, double total_porfolio_value, double total_spent, double credit, std::string clientID);
-	//static void ClientConstructor();
 	static void ValidName(std::string name);
-	static void ValidPriceOfPurchase(double price_of_purchase);
-	static void ValidSize(int size);
-	static void ValidPortfolioValue(double total_portfolio_value);
-	static void ValidTotalSpent(double total_spent);
-	static void ValidCredit(double credit);
+	
 
 
 

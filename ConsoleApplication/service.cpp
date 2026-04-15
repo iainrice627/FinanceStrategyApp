@@ -1,16 +1,18 @@
-#include "service.h"
+#include <mysql.h>
+
 #include <iostream>
-#include "ctime"
-#include "stock.h"
-#include "stack.h"
-#include "portfolio.h"
-#include "menu.h"
 #include <fstream>
 #include <string>
 #include <sstream>
-#include "validation.h"
 #include <vector>
-#include <mysql.h>
+#include "ctime"
+
+#include "stock.h"
+#include "stack.h"
+#include "portfolio.h"
+#include "validation.h"
+#include "service.h"
+#include "menu.h"
 
 
 
@@ -331,11 +333,6 @@ double Service::CalculateNewStockPrice(std::string chosenStock, double userPerce
 
     }
 
-    if (stocksIndices.empty())
-    {
-        return 0.0;
-    }
-
     int latestIndex;
     
     stocksIndices.pop(latestIndex);  
@@ -364,6 +361,14 @@ double Service::CalculateNewStockPrice(std::string chosenStock, double userPerce
 
     return newStockPrice;
 }
+
+//when a user inserts a new value, the program will choose the strategy and will act with the new price. 
+//we buy at the new price. so the new items will have its price of purchase and current value set to new price.
+//we sell at the new price. 
+//the dictionary value fo the stock will be changed to the new price.
+//we need to check if the stocks in this portfolio will have been chnaged to new current value. YES if there is another one in there. but if not it will do nothing. the dictionary will be ok but the other stocks in the database belonging to other clients will be unchanged. 
+    // options - leave database alone and insert a update prices when program loads.  and then the user can use new prices after this and it get saved again the stocks list of values. means values in database could be wrong for long time, if a stock is not selected for the program.
+    //optins - need some update the database method to happen as soon as the value has chnaged.
 
 
 std::vector<std::string> Service::GetClients() {
@@ -435,7 +440,7 @@ std::string Service::SelectClient(std::vector<std::string> clients, int size) {
     }
 
     std::cout << "ERROR: ClientID inputed is InValid." << std::endl;
-    return;
+    throw std::runtime_error("ClientID not found: " + clientID);
 
    
 
@@ -443,7 +448,7 @@ std::string Service::SelectClient(std::vector<std::string> clients, int size) {
 }
 
 
-static double GetPrice(Dictionary& dictionary, std::string chosenStock) {
+double Service::GetPrice(Dictionary& dictionary, std::string chosenStock) {
 
     auto item = dictionary.find(chosenStock);
     if (item != dictionary.end()) {
@@ -453,14 +458,14 @@ static double GetPrice(Dictionary& dictionary, std::string chosenStock) {
     }
     else {
         std::cout << "Stock '" << chosenStock << "' not found in dictionary.\n";
-        return;
+        throw std::runtime_error("Stock not found: " + chosenStock);
     }
 
     
 
 }
 
-static void UpdateCurrentValue(Dictionary& dictionary, double newStockPrice, std::string chosenStock) {
+void Service::UpdateCurrentValue(Dictionary& dictionary, double newStockPrice, std::string chosenStock) {
 
     auto item = dictionary.find(chosenStock);
     if (item != dictionary.end()) {
@@ -473,6 +478,22 @@ static void UpdateCurrentValue(Dictionary& dictionary, double newStockPrice, std
         
     }
 
+    
+
+
+}
+
+static void UpdateDatabase(double newStockPrice, std::string chosenStock) {
+
+    // we have the double price. we have the name of the stock want to change.
+    //need to conenct to the databae.
+    //update all the records with same stock name, irrespective of who they belong to.
+    //  do we exlcude the ones  belonging to clientID that matches the user of this program, becasue the save method will update. this could happen at the save feature. BUt a user may haev changed multiple stocks values in the progra, runtime. 
+        //WHAT DOES SAVE DO?  it gets the clients stocks in question and updates thier records in DB with new values in DB. it inserts any new records created in runtime. some stocks will have been changed, others will not. 
+        //how do we tell the database to update the currentvalue
+        
+                //when? when calcute new price called?  when saving the program and exiting?  
+                // this would be easier if this was a bespoke Client database but its a global database with records nbleonging to many clients. i wonder if design of database is problem or is the point og using mysql, so we can create order.
 
 
 }
