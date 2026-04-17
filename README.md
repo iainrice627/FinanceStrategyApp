@@ -40,7 +40,7 @@ Intention is to use the dictionary to get calues, calcualte sales and buys price
 
 #To do
 
-contonue to repair the calcualte and update values for all the stocks in runtime and in database, when values are changed.
+continue to repair the calcualte and update values for all the stocks in runtime and in database, when values are changed.
 update the client login so a input that doesnt match list is not accepted. 
 create the login and password feature using the client list and somehow passwords (gernally figure out user authentication)
 create a back feature to exit an option at any point to return to menu.
@@ -49,3 +49,8 @@ change the whole insert percentage change and use a way to get live change in pr
 change the get date and time to prevent dates above 31 days or in the future.
 create and run test project mehtods.
 consider a better GUI. - turn into a GUI using some framwork eg .NET
+
+
+#Current Status
+
+There is a bug. AN exception is thrown and the cause appears to be the corruption of a string, where the strings internal pointer appears to be invalid. Its not known to me how this is happening but the workign theory now is there is some buffer overflow, or stack overflow that is somehow causing this particular string to become corrupted. I need to learn how find the source of the problem and how to repair the program. SOo development of this will stop until i figure out this issue!
