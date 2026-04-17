@@ -16,14 +16,16 @@ int main()
 
 	Portfolio portfolio(clientID);
 
-	Service::LoadPortfolioSQL2(portfolio);
-	Menu::LoadDictionary(portfolio);
+	Portfolio& refportfolio = portfolio;
+
+	Service::LoadPortfolioSQL2(refportfolio);
+	Menu::LoadDictionary(refportfolio);
 
 	while (true) {
 		try {
 			Menu::DisplayMenuOptions();
 			int selection = Menu::ListenMenuChoice();
-			bool status = Menu::DetermineAction(selection, portfolio);
+			bool status = Menu::DetermineAction(selection, refportfolio);
 
 			if (!status)
 				break;

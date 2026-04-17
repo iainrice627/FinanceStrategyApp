@@ -154,13 +154,22 @@ void Service::LoadPortfolioSQL2(Portfolio& portfolio) {
 
         Stock stock;
 
-        stock.stockID = row[0];
+       /* stock.stockID = row[0];
         stock.name = row[1];
         stock.number_of_shares = atoi(row[2]);
         stock.date_of_purchase = row[3];
         stock.price_of_purchase = atof(row[4]);
         stock.current_value = atof(row[5]);
-        stock.clientID = row[6];
+        stock.clientID = row[6];*/
+
+
+        stock.stockID = std::string(row[0]);
+        stock.name = std::string(row[1]);
+        stock.number_of_shares = atoi(row[2]);
+        stock.date_of_purchase = std::string(row[3]);
+        stock.price_of_purchase = atof(row[4]);
+        stock.current_value = atof(row[5]);
+        stock.clientID = std::string(row[6]);
 
         portfolio.AddStock(stock);
 
@@ -187,6 +196,7 @@ void Service::SavePortfolioSQL2(Portfolio& portfolio) {
     
     
     //acces the list
+     //std::vector<Stock> portfolioList = portfolio.GetPortfolioStocks();
      Stock* portfolioList = portfolio.GetPortfolioStocks();
 
      //  get the portfolio size  
@@ -408,7 +418,8 @@ std::string Service::DisplayClients() {
 
     clients = Service::GetClients();
 
-    int size = clients.size();
+    //int size = clients.size();
+    std::size_t size = clients.size();
 
     for(int i = 0; i < size; ++i) {
 

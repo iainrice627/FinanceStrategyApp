@@ -5,6 +5,7 @@
 #include "stock.h"
 #include "queue.h"
 //#include "service.h"
+//#include <vector>
 
 
 
@@ -14,6 +15,9 @@ class Portfolio {
 private:
 	static const int capacity = 100;
 	Stock portfolio_stocks[capacity];
+
+	//std::vector<Stock>portfolio_stocks;
+
 	int size;
 	double total_porfolio_value;
 	double total_spent;
@@ -34,6 +38,7 @@ public:
 	double GetTotalSpent();
 	std::string GetClientID();
 	Stock* GetPortfolioStocks();
+	//std::vector<Stock> GetPortfolioStocks();
 
 	void SetClientID(std::string clientID);
 	

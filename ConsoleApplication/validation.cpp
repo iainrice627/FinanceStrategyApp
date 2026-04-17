@@ -127,17 +127,18 @@ int Validation::GetInterger() {
 	while (true)
 
 	{
-		std::cout << "Enter Number of shares: ";
+		std::cout << "Enter Number of shares (enter 0 to return): ";
 		if (std::cin >> value)
 			return value;
 
-		else if (value <= 0) {
+		else if (value < 0) {
 
-			std::cout << "Error: please enter a numeric value greater than 0.\n";
+			std::cout << "Error: please enter a numeric value greater than 0 to purchase stock (enter 0 to return).\n";
 
 			std::cin.clear();              // clear fail state
 			std::cin.ignore(10000, '\n');  // discard invalid characters
 		}
+
 
 		else {
 

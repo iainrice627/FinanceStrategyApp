@@ -4,12 +4,13 @@
 #include "stack.h"
 #include "service.h"
 #include "validation.h"
+#include <vector>
 
 
 Portfolio::Portfolio(std::string clientId) 
 
 {
-	this->size = 0;
+	this->size = 0;  //vector remove
 	this->total_porfolio_value = 0.0;
 	this->total_spent = 0.0;
 	this->credit = 0.0;
@@ -24,7 +25,7 @@ Portfolio::Portfolio(double total_porfolio_value, double total_spent, double cre
 	this->total_porfolio_value = total_porfolio_value;
 	this->total_spent = total_spent;
 	this->credit = credit;
-	this->size = size;
+	this->size = size;  //vector remove
 	this->netGains = netGains;
 	
 }
@@ -38,6 +39,7 @@ void Portfolio:: SetClientID(std::string clientID) {
 
 int Portfolio:: GetSizePortfolio() {
 
+	//int size = portfolio_stocks.size(); // vector get size
 	return size;
 
 }
@@ -48,7 +50,7 @@ void Portfolio:: DisplayPortfolio()
 	UpdatePortfolioValue();
 	UpdateNetGainsLossValue();
 	UpdateTotalSpent();
-
+	int size = GetSizePortfolio();
 
 	std::cout << std::endl;
 	std::cout << "CLIENT PORTFOLIO: " << clientID <<std::endl;
@@ -88,6 +90,26 @@ void Portfolio:: RemoveStock(int index) {
 
 }
 
+//vector removestock
+//void Portfolio::RemoveStock(int index) {
+//
+//	// Reject negative indices or indices >= size
+//	if (index < 0 || static_cast<std::size_t>(index) >= portfolio_stocks.size()) {
+//		std::cout << "Error: out of bounds. index invalid." << std::endl;
+//		return;
+//	}
+//
+//	// Safe erase
+//	portfolio_stocks.erase(portfolio_stocks.begin() + index);
+//
+//
+//}
+
+
+
+
+
+
 
 void Portfolio:: AddStock(Stock stock) {
 
@@ -111,13 +133,21 @@ void Portfolio:: AddStock(Stock stock) {
 		std::cout << "Error. Cannot add anymore. Max capacity reached" << std::endl;
 
 	}
-	
 
-	
-
-	
+// vector add stocks
+//void Portfolio::AddStock(Stock stock) {
+//
+//
+//	portfolio_stocks.push_back(stock);
+//
+//
 }
+
+	
+
 void Portfolio::UpdateTotalSpent() {
+
+	//int size = GetSizePortfolio(); //vector 
 
 	total_spent = 0;
 	for (int i = 0; i < size; ++i) {
@@ -133,6 +163,8 @@ void Portfolio::UpdateTotalSpent() {
 
 void Portfolio::UpdatePortfolioValue() {
 
+	//int size = GetSizePortfolio(); //vector
+
 	total_porfolio_value = 0;
 	for (int i = 0; i < size; ++i) {
 
@@ -146,6 +178,7 @@ void Portfolio::UpdatePortfolioValue() {
 
 void Portfolio::UpdateNetGainsLossValue() {
 
+	//int size = GetSizePortfolio(); //vector
 
 	for (int i = 0; i < size; ++i) {
 
@@ -159,6 +192,8 @@ void Portfolio::UpdateNetGainsLossValue() {
 
 
 void Portfolio::UpdateCurrentValueStock(double newStockPrice, std::string chosenStock) {
+
+	//int size = GetSizePortfolio(); //vector
 
 	for (int i =0; i < size; ++i) {
 
@@ -177,6 +212,8 @@ void Portfolio::UpdateCurrentValueStock(double newStockPrice, std::string chosen
 void Portfolio::SellEarliest(std::string chosenStock, double newStockPrice)
 {
 	int portfolioSize = GetSizePortfolio();
+
+	//int size = GetSizePortfolio(); //vector
 
 	Queue<int>stocksIndices(size);
 
@@ -208,6 +245,8 @@ void Portfolio::SellEarliest(std::string chosenStock, double newStockPrice)
 void Portfolio::SellLatest(std::string chosenStock, double newStockPrice)
 {
 	
+	//int size = GetSizePortfolio(); //vector
+
 	Stack<int>stocksIndices(size);
 
 	for (int i = 0; i < size; ++i) {
@@ -246,8 +285,14 @@ void Portfolio:: Buy(std::string chosenStock, double newStockPrice)
 
 	while(numShares == 0) {
 
+		
 		std::cout << "How many shares do you want to buy?: " << std::endl;
 		number_of_shares = Validation::GetInterger();
+		if (number_of_shares == 0) {
+			std::cout << "Cancelling Purchase" << std::endl;
+			// back to menu.
+			return;
+		}
 		numShares = Validation::ValidNumberOfShares(number_of_shares, chosenStock, *this);
 
 	}
@@ -307,6 +352,8 @@ void Portfolio::DisplayStock() {
 
 	}
 
+	int size = GetSizePortfolio();
+
 	Queue<int>stocksIndices(size);
 	int count = 0;
 	while (count < size) {
@@ -349,16 +396,25 @@ std::string Portfolio:: GetClientID() {
 	return clientID;
 }
 
-Stock* Portfolio:: GetPortfolioStocks() {
 
-	return portfolio_stocks;  
+
+//std::vector<Stock> Portfolio:: GetPortfolioStocks() {
+//
+//	return portfolio_stocks;  
+//}
+
+
+
+Stock* Portfolio::GetPortfolioStocks() {
+
+	return portfolio_stocks;
 }
 
 
 
 int Portfolio:: GetTotalSharesPortfolio() {
 
-
+	//int size = GetSizePortfolio(); //vector
 	int sharesBucket = 0;
 
 	for (int i = 0; i < size; ++i) {
@@ -378,6 +434,7 @@ int Portfolio:: GetTotalSharesOfStock(std::string chosenStock) {
 
 
 	int sharesBucket = 0;
+	//int size = GetSizePortfolio(); //vector
 
 	for (int i = 0; i < size; ++i) {
 

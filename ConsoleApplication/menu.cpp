@@ -124,9 +124,6 @@ void Menu::DisplayStockList() {
 bool Menu::Option1(Portfolio& portfolio)
 {
 
-	std::cout << "Address of portfolio in Menu: " << &portfolio << "\n";
-
-
 	std::cout << std::endl;
 	std::cout << "This program does not automatically change the value of stocks by listening to a live feed of updated stock prices. To determine your strategy you should enter your stock and the change of value, as a % from the last price." << std::endl;
 	std::cout << "For example: You need to know 1) the price this program holds for the stock. 2)know the new prIce, 3) calculate the % change and 4) input that percentage chnage when prompted." << std::endl;
@@ -142,6 +139,7 @@ bool Menu::Option1(Portfolio& portfolio)
 	std::string userChosenStock = "";
 	std::cout <<"Enter the name of an available stock." << std::endl;
 	std::cin >> userChosenStock;
+	
 
 
 	std::string chosenStock = Validation::ValidStock(userChosenStock);
