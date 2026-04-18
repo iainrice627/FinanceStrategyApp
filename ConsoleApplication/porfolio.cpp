@@ -52,6 +52,9 @@ void Portfolio:: DisplayPortfolio()
 	UpdateTotalSpent();
 	int size = GetSizePortfolio();
 
+	std::cout.setf(std::ios::fixed);
+	std::cout.precision(2);
+
 	std::cout << std::endl;
 	std::cout << "CLIENT PORTFOLIO: " << clientID <<std::endl;
 	std::cout << std::endl;
@@ -152,7 +155,7 @@ void Portfolio::UpdateTotalSpent() {
 	total_spent = 0;
 	for (int i = 0; i < size; ++i) {
 
-		double spend = portfolio_stocks[i].price_of_purchase;
+		double spend = (portfolio_stocks[i].price_of_purchase) * portfolio_stocks[i].number_of_shares;
 		total_spent += spend;
 
 	}
@@ -168,7 +171,7 @@ void Portfolio::UpdatePortfolioValue() {
 	total_porfolio_value = 0;
 	for (int i = 0; i < size; ++i) {
 
-		double stock_value = portfolio_stocks[i].current_value;
+		double stock_value = (portfolio_stocks[i].current_value) * portfolio_stocks[i].number_of_shares;
 		total_porfolio_value += stock_value;
 
 	}
@@ -182,7 +185,7 @@ void Portfolio::UpdateNetGainsLossValue() {
 
 	for (int i = 0; i < size; ++i) {
 
-		double netGain = portfolio_stocks[i].current_value - portfolio_stocks[i].price_of_purchase;
+		double netGain = (portfolio_stocks[i].current_value * portfolio_stocks[i].number_of_shares) - ((portfolio_stocks[i].price_of_purchase) * portfolio_stocks[i].number_of_shares);
 
 		netGains += netGain;
 		

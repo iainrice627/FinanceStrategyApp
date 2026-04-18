@@ -16,11 +16,6 @@
 
 
 
-
-
-
-
-
 Stock Service::CreateStock(std::string name, int number_of_shares, double price_of_purchase, std::string clientID) {
 
 
@@ -358,8 +353,10 @@ double Service::CalculateNewStockPrice(std::string chosenStock, double userPerce
 
     double basePrice = GetPrice(dictionary, chosenStock);
 
+    //get the new price
     double newStockPrice = basePrice + (basePrice * (userPercentChoice / 100.0));
 
+    //assign new price to current value field.
     latestStock.current_value = newStockPrice;
 
     // need to re update the dictionary value. 
