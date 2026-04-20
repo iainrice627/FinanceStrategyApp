@@ -230,8 +230,6 @@ bool Menu::Option3(std::string clientID)
 
 	Portfolio& refportfolio = testPortfolio;
 
-	testPortfolio.SubmitDBPassword();
-
 	Service::LoadPortfolioSQL2(refportfolio);
 	Menu::LoadDictionary(refportfolio);
 
@@ -252,6 +250,12 @@ bool Menu::Option3(std::string clientID)
 		}
 
 	}
+
+
+	// 
+	// 
+	//Practice(); //????
+	// we need to create some test objects and re call all the methods but save to these new test objects, so we are not impacting the real version and then not save the changes made.
 	return true;
 
 }
@@ -316,13 +320,13 @@ bool Menu::TESTOption5()
 //	
 //	stockListFile.close();
 //
-//
+//}
 
 void Menu::LoadDictionary(Portfolio& portfolio) {
 
-
-
 	MYSQL* connection = Service::ConnectToDatabase(portfolio);
+
+	
 
 	if (mysql_query(connection, "USE Portfoliodb") != 0) {
 		std::cout << "SQL USE command failed: " << mysql_error(connection) << std::endl;

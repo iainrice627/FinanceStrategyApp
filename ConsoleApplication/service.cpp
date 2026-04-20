@@ -78,11 +78,13 @@ void Service::LoadPortfolio(Portfolio& portfolio) {
 
 
 
-
 MYSQL* Service::ConnectToDatabase(Portfolio& portfolio) {
 
-
-    std::string password = portfolio.GetDatabasePassword();
+    std::string clientID = portfolio.GetClientID();
+    std::string password;
+    std::cout << std::endl;
+    std::cout << "Enter the password for the database: " << std::endl;
+    std::cin >> password;
 
     MYSQL* connection = mysql_init(NULL);
 
@@ -112,9 +114,7 @@ MYSQL* Service::ConnectToDatabase(Portfolio& portfolio) {
 
 void Service::LoadPortfolioSQL2(Portfolio& portfolio) {
 
-    std::string password = portfolio.GetDatabasePassword();
-    
-    MYSQL* connection = ConnectToDatabase(portfolio);
+	MYSQL* connection = ConnectToDatabase(portfolio);
 
     std::string clientID = portfolio.GetClientID();
 

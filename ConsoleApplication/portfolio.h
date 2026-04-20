@@ -24,7 +24,7 @@ private:
 	double credit;
 	std::string clientID;
 	double netGains;
-	std::string passwordDB;
+	
 
 public:
 	
@@ -67,8 +67,7 @@ public:
 	int GetTotalSharesPortfolio();
 	int GetTotalSharesOfStock(std::string chosenStock);
 	
-	std::string GetDatabasePassword();
-	void SubmitDBPassword();
+	
 
 
 
