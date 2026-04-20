@@ -15,9 +15,7 @@ The fundamentals have been completed, hwoever there is a list of jobs to complet
 
 #To do
 
-new code - when change value of stock not in porfolio - read file find all stocks name and get most recent current value. use to create new proce. read file and change write over the part of 
-
-current value with new price.
+new code - when change value of stock not in porfolio - read file find all stocks name and get most recent current value. use to create new proce. read file and change write over the part of current value with new price.
 
 create the login and password feature using the client list and somehow passwords (gernally figure out user authentication)
 
