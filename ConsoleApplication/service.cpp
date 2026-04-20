@@ -13,10 +13,11 @@
 #include "validation.h"
 #include "service.h"
 #include "menu.h"
+//#include <bits/stdc++.h> 
 
 
 
-Stock Service::CreateStock(std::string name, int number_of_shares, double price_of_purchase, std::string clientID) {
+Stock Service::CreateStock(std::string name, int number_of_shares, double price_of_purchase, std::string clientID, Portfolio& portfolio) {
 
 
     
@@ -24,7 +25,7 @@ Stock Service::CreateStock(std::string name, int number_of_shares, double price_
     std::string stockID = GenerateStockID(name, clientID, date_of_purchase);
     double current_value = price_of_purchase;
     Validation::ValidDateString(date_of_purchase);
-    Validation::ValidGenerateStockID(stockID);
+    Validation::ValidGenerateStockID(stockID,portfolio);
     Validation::ValidClientID(clientID);
     Validation::StockConstructor(name, number_of_shares, price_of_purchase);
 
@@ -148,15 +149,6 @@ void Service::LoadPortfolioSQL2(Portfolio& portfolio) {
     while ((row = mysql_fetch_row(result)) != NULL) {   //Always fetch and test in the same while condition:
 
         Stock stock;
-
-       /* stock.stockID = row[0];
-        stock.name = row[1];
-        stock.number_of_shares = atoi(row[2]);
-        stock.date_of_purchase = row[3];
-        stock.price_of_purchase = atof(row[4]);
-        stock.current_value = atof(row[5]);
-        stock.clientID = row[6];*/
-
 
         stock.stockID = std::string(row[0]);
         stock.name = std::string(row[1]);
@@ -312,8 +304,29 @@ std::string Service::GenerateStockID(std::string name, std::string clientID, std
     date_of_purchase.erase(2, 1);
     date_of_purchase.erase(4, 1);
    //inset a random number here. call a random number genrator
+    int randomNumber = 0;
 
-    std::string stockID = name + "-" + date_of_purchase + "-" + clientID;
+    std:: vector<int> randomNums = RandomNumberGenerator();
+    int noOfRandomNums = randomNums.size();
+   
+    
+
+    //join the sperate intergers into one longer number - by multiplying by 10 adding next number.
+
+    for (int i = 0; i < noOfRandomNums; ++i) {
+    
+        randomNumber = randomNumber * 10 + randomNums[i];
+    
+    }
+    //convert the integer to a string
+
+    std::string randomNumberString = std::to_string(randomNumber);
+
+    std::string stockID = name + "-" + date_of_purchase + "-" + clientID + "-" + randomNumberString;
+
+    //validation
+    //is the stockID distinct and unique to all the stockIDs in the database?
+
 
     return stockID;
 
@@ -369,13 +382,6 @@ double Service::CalculateNewStockPrice(std::string chosenStock, double userPerce
     return newStockPrice;
 }
 
-//when a user inserts a new value, the program will choose the strategy and will act with the new price. 
-//we buy at the new price. so the new items will have its price of purchase and current value set to new price.
-//we sell at the new price. 
-//the dictionary value fo the stock will be changed to the new price.
-//we need to check if the stocks in this portfolio will have been chnaged to new current value. YES if there is another one in there. but if not it will do nothing. the dictionary will be ok but the other stocks in the database belonging to other clients will be unchanged. 
-    // options - leave database alone and insert a update prices when program loads.  and then the user can use new prices after this and it get saved again the stocks list of values. means values in database could be wrong for long time, if a stock is not selected for the program.
-    //optins - need some update the database method to happen as soon as the value has chnaged.
 
 
 std::vector<std::string> Service::GetClients() {
@@ -507,7 +513,47 @@ static void UpdateDatabase(double newStockPrice, std::string chosenStock) {
 }
 
 
+void Service::linearCongruentialMethod(int Xo, int m, int a, int c, std::vector<int>& randomNums, int noOfRandomNums) {
+    // Initialize the seed state 
+    randomNums[0] = Xo;
 
+    // Traverse to generate required 
+    // numbers of random numbers 
+    for (int i = 1; i < noOfRandomNums; i++) {
+        // Follow the linear congruential method 
+        randomNums[i]
+            = ((randomNums[i - 1] * a) + c) % m;
+    }
+
+}
+
+
+std::vector<int> Service::RandomNumberGenerator() {
+
+
+    int Xo = 5; // Seed value 
+    int m = 7; // Modulus parameter 
+    int a = 3; // Multiplier term 
+    int c = 3; // Increment term 
+
+    // Number of Random numbers 
+    // to be generated 
+    int noOfRandomNums = 10;
+
+    // To store random numbers 
+    std::vector<int> randomNums(noOfRandomNums);
+
+    // Function Call 
+    linearCongruentialMethod(
+        Xo, m, a, c,
+        randomNums, noOfRandomNums);
+
+    
+    //return the generated random numbers
+
+    return randomNums;
+
+}
 
 
 

@@ -19,7 +19,7 @@ public:
 	static std::string ValidStock(std::string userChosenStock);
 	static double ValidPercentage(double userPercentChoice);
 	static int ValidNumberOfShares(int number_of_shares, std::string chosenStock, Portfolio& portfolio);
-	static std::string ValidGenerateStockID(std::string stockID);
+	static std::string ValidGenerateStockID(std::string stockID, Portfolio& portfolio);
 	static std::string ValidDateString(std::string formattedTime);
 	static double GetDouble();
 	static int GetInterger();

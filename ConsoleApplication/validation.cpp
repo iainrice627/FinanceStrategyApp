@@ -175,20 +175,38 @@ int Validation::ValidNumberOfShares(int number_of_shares, std::string chosenStoc
 }
 
 
-std::string Validation::ValidGenerateStockID(std::string stockID) {
+std::string Validation::ValidGenerateStockID(std::string stockID, Portfolio& portfolio) {
 
 	
 	  std::regex pattern(
-		  R"REG(^([A-Z]{1,5}(\.[A-Z])?)-([0-3][0-9][0-1][0-9][0-9]{4})-([A-Z]{2}[0-9]{5})$)REG"
+		  R"REG(^([A-Z]{1,5}(\.[A-Z])?)-([0-3][0-9][0-1][0-9][0-9]{4})-([A-Z]{2}[0-9]{5})-([0-9]{10})$)REG"
 	  );
 
 
 
 	std::smatch match;
 
+	bool found;
+
+	for (int i = 0; i < portfolio.GetSizePortfolio(); ++i) {
+
+		if (stockID == (portfolio.GetPortfolioStocks())->stockID) {
+			
+			found = true;
+		}
+
+	}
+
+
+
 	try {
 
 		if (std::regex_match(stockID, match, pattern))
+		{
+			return stockID;
+		}
+		//insert a check on the stockIDs if this one is unique. 
+		else if(found == true)
 		{
 			return stockID;
 		}

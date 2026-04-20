@@ -301,7 +301,7 @@ void Portfolio:: Buy(std::string chosenStock, double newStockPrice)
 	}
 	
 
-	Stock stock = Service::CreateStock(chosenStock, numShares, newStockPrice, clientID);
+	Stock stock = Service::CreateStock(chosenStock, numShares, newStockPrice, clientID, *this);
 	AddStock(stock);
 	DeductCreditValue(newStockPrice);
 	UpdateCurrentValueStock(newStockPrice, chosenStock);

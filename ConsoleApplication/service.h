@@ -20,7 +20,7 @@ public:
 	static std::string GetTime();
 	static std::string DateTime(time_t time, const char* format);
 	static double CalculateNewStockPrice(std::string chosenStock, double userPercentChoice, Portfolio& portfolio);
-	static Stock CreateStock(std::string name, int number_of_shares, double price_of_purchase, std::string clientID);
+	static Stock CreateStock(std::string name, int number_of_shares, double price_of_purchase, std::string clientID, Portfolio& portfolio);
 	static std::string GenerateStockID(std::string name, std::string clientID, std:: string date_of_purchase);
 	static MYSQL* ConnectToDatabase(Portfolio& portfolio);
 	static void LoadPortfolio(Portfolio& portfolio);
@@ -31,6 +31,8 @@ public:
 	static std::string SelectClient(std::vector<std::string> clients, int size);
 	static double GetPrice(Dictionary& dictionary, std::string chosenStock);
 	static void UpdateCurrentValue(Dictionary& dictionary, double newStockPrice, std::string chosenStock);
+	static void linearCongruentialMethod(int Xo, int m, int a, int c,std::vector<int>&randomNums,int noOfRandomNums);
+	static std::vector<int> RandomNumberGenerator();
 
 
 };
