@@ -20,7 +20,6 @@
 Stock Service::CreateStock(std::string name, int number_of_shares, double price_of_purchase, std::string clientID, Portfolio& portfolio) {
 
 
-    
     std::string date_of_purchase = GetTime();
     std::string stockID = GenerateStockID(name, clientID, date_of_purchase);
     double current_value = price_of_purchase;
@@ -309,8 +308,6 @@ std::string Service::GenerateStockID(std::string name, std::string clientID, std
     std:: vector<int> randomNums = RandomNumberGenerator();
     int noOfRandomNums = randomNums.size();
    
-    
-
     //join the sperate intergers into one longer number - by multiplying by 10 adding next number.
 
     for (int i = 0; i < noOfRandomNums; ++i) {
@@ -322,10 +319,8 @@ std::string Service::GenerateStockID(std::string name, std::string clientID, std
 
     std::string randomNumberString = std::to_string(randomNumber);
 
+    //create the id
     std::string stockID = name + "-" + date_of_purchase + "-" + clientID + "-" + randomNumberString;
-
-    //validation
-    //is the stockID distinct and unique to all the stockIDs in the database?
 
 
     return stockID;
@@ -356,9 +351,6 @@ double Service::CalculateNewStockPrice(std::string chosenStock, double userPerce
     stocksIndices.pop(latestIndex);  
     
     Stock latestStock = portfolio.AccessSpecificStock(latestIndex);  
-
-
-    //double basePrice = latestStock.price_of_purchase;
     
     Dictionary dictionary = Menu::GetStocksandValues();
 
@@ -373,7 +365,6 @@ double Service::CalculateNewStockPrice(std::string chosenStock, double userPerce
     latestStock.current_value = newStockPrice;
 
     // need to re update the dictionary value. 
-
     UpdateCurrentValue(dictionary, newStockPrice, chosenStock);
     
     // make sure the stock item in this method, gets to the portfolio.

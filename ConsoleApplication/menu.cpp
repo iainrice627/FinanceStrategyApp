@@ -46,6 +46,24 @@ int Menu::ListenMenuChoice() {
 			
 }
 
+void Menu::TESTDisplayMenuOptions()
+
+{
+	std::cout << std::endl;
+	std::cout << "Select one of the options in the Menu by pressing 1, 2, 3, 4 or 5." << std::endl;
+	std::cout << std::endl;
+	std::cout << "Option 1: Enter Stock Performance" << std::endl;
+	std::cout << "Option 2: Find Stock" << std::endl;
+	std::cout << std::endl;
+	std::cout << "Option 4: Show Portfolio" << std::endl;
+	std::cout << "OPtion 5: Exit" << std::endl;
+	std::cout << std::endl;
+
+}
+
+
+
+
 
 
 
@@ -64,7 +82,7 @@ bool Menu::DetermineAction(int selection, Portfolio& portfolio) {
 
 		else if (selection == 3) {
 
-			return  Option3();
+			return  Option3(portfolio.GetClientID());
 
 		}
 
@@ -85,6 +103,42 @@ bool Menu::DetermineAction(int selection, Portfolio& portfolio) {
 			return true;
 
 		}
+
+
+}
+
+
+
+bool Menu::TESTDetermineAction(int selection, Portfolio& portfolio) {
+
+
+	if (selection == 1) {
+
+		return Option1(portfolio);
+	}
+
+	else if (selection == 2) {
+
+		return Option2(portfolio);
+	}
+
+	else if (selection == 4) {
+
+		return Option4(portfolio);
+
+	}
+
+	else if (selection == 5) {
+
+		return TESTOption5();
+
+	}
+
+	else {
+
+		return true;
+
+	}
 
 
 }
@@ -167,10 +221,39 @@ bool Menu::Option2(Portfolio& portfolio)
 }
 
 
-bool Menu::Option3()
+bool Menu::Option3(std::string clientID)
 
 {
+	// load database into a testportfolio object
+	
+	Portfolio testPortfolio(clientID);
 
+	Portfolio& refportfolio = testPortfolio;
+
+	Service::LoadPortfolioSQL2(refportfolio);
+	Menu::LoadDictionary(refportfolio);
+
+	while (true) {
+		try {
+			Menu::TESTDisplayMenuOptions();
+			int selection = Menu::ListenMenuChoice();
+			bool status = Menu::TESTDetermineAction(selection, refportfolio);
+
+			if (!status)
+				break;
+		}
+		catch (const std::exception& e) {
+			std::cout << std::endl;
+			std::cout << "Error: " << e.what() << std::endl;
+			std::cout << "Returning to menu..." << std::endl;
+
+		}
+
+	}
+
+
+	// 
+	// 
 	//Practice(); //????
 	// we need to create some test objects and re call all the methods but save to these new test objects, so we are not impacting the real version and then not save the changes made.
 	return true;
@@ -193,6 +276,17 @@ bool Menu::Option5(Portfolio& portfolio)
 
 	/*Service::SavePortfolio(portfolio);*/
 	Service::SavePortfolioSQL2(portfolio);
+
+	std::cout << std::endl;
+	std::cout << "Logging Out User and Reloading login page" << std::endl;
+	return false;
+
+}
+
+
+bool Menu::TESTOption5()
+
+{
 
 	std::cout << std::endl;
 	std::cout << "Logging Out User and Reloading login page" << std::endl;

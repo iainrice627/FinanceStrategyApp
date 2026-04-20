@@ -228,18 +228,26 @@ void Portfolio::SellEarliest(std::string chosenStock, double newStockPrice)
 			stock.current_value = newStockPrice;
 			
 		}
+		else if (portfolio_stocks[i].name != chosenStock) {
+
+			//we  dont own the stock entered so cannot sell.
+			std::cout << "You do not own any " << chosenStock << ". Nothing to sell." << std::endl;
+			return;
+
+		}
 
 	}
 	
 	int index;
 	stocksIndices.remove(index);
 	Stock stock = portfolio_stocks[index];
-	double profit = stock.current_value - stock.price_of_purchase;
-	std::cout << "The oldest stock of " << stock.name << ", with " << stock.number_of_shares << " shares, has been sold for " << stock.current_value << ", with a net gain of " << profit << "." << std::endl;
 	UpdateCurrentValueStock(newStockPrice, chosenStock);
 	UpdatePortfolioValue();
 	AddCreditValue(newStockPrice);
 	RemoveStock(index);
+	double profit = stock.current_value - stock.price_of_purchase;
+	std::cout << "The oldest stock of " << stock.name << ", with " << stock.number_of_shares << " shares, has been sold for " << stock.current_value << ", with a net gain of " << profit << "." << std::endl;
+	
 
 }
 
@@ -259,20 +267,19 @@ void Portfolio::SellLatest(std::string chosenStock, double newStockPrice)
 			Stock stock = portfolio_stocks[i];
 			stocksIndices.push(i);
 			stock.current_value = newStockPrice;
-
-
 		}
 	}
 
 	int index;
 	stocksIndices.pop(index);
 	Stock stock = portfolio_stocks[index];
-	double profit = stock.current_value - stock.price_of_purchase;
-	std::cout << "The most recent stock of " << stock.name << ", with " << stock.number_of_shares << " shares, has been sold for " << stock.current_value << ", with a net gain of " << profit << "." << std::endl;
 	UpdateCurrentValueStock(newStockPrice, chosenStock);
 	UpdatePortfolioValue();
 	AddCreditValue(newStockPrice);
 	RemoveStock(index);
+	double profit = stock.current_value - stock.price_of_purchase;
+	std::cout << "The most recent stock of " << stock.name << ", with " << stock.number_of_shares << " shares, has been sold for " << stock.current_value << ", with a net gain of " << profit << "." << std::endl;
+
 
 	 
 
