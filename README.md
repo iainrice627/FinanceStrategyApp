@@ -19,10 +19,6 @@ new code - when change value of stock not in porfolio - read file find all stock
 
 create the login and password feature using the client list and somehow passwords (gernally figure out user authentication)
 
-create a back feature to exit an option at any point to return to menu.
-
-create option 3 practice feature.
-
 change the get date and time to prevent dates above 31 days or in the future.
 
 create and run test project mehtods.
