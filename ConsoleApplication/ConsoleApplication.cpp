@@ -11,15 +11,20 @@ int main()
 
 	//a login process will ask for user authentication. when the user confirmed we will havea  clientID.
 	//choose the client from the list
-
+	
 	std::string clientID = Service::DisplayClients();
+		
 
 	Portfolio portfolio(clientID);
-
 	Portfolio& refportfolio = portfolio;
+
+	//set the DB passwrod
+	portfolio.SubmitDBPassword();
+
 
 	Service::LoadPortfolioSQL2(refportfolio);
 	Menu::LoadDictionary(refportfolio);
+	
 
 	while (true) {
 		try {
