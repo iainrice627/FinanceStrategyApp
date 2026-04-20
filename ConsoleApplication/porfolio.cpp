@@ -16,6 +16,7 @@ Portfolio::Portfolio(std::string clientId)
 	this->credit = 0.0;
 	this->netGains = 0.0;
 	this->clientID = clientId;
+	this->passwordDB = "";
 }
 
 Portfolio::Portfolio(double total_porfolio_value, double total_spent, double credit, int size, double netGains)
@@ -477,5 +478,70 @@ double Portfolio::GetCredit() {
 }
 
 
+std::string Portfolio::GetDatabasePassword() {
+
+
+	return passwordDB;
+}
+
+
+
+
+
+
+
+void Portfolio::SubmitDBPassword() {
+
+
+	std::string password;
+	
+
+	while(true) {
+
+		std::cout << std::endl;
+		std::cout << "Enter the password for the database. To cancel, type 'exit': " << std::endl;
+		std::cin >> password;
+
+		if (password == "exit") {
+
+			std::cout << "Exiting program" << std::endl;
+			throw std::runtime_error("No password for database entered. Cancelling Seession."); // this doesnt return to menu becasu emenu has npot even been called yet. prgoram crashes becaue we cannot continue without this connection.
+		}
+
+		//allocates a connection object in memory
+		MYSQL* connection = mysql_init(nullptr);
+		
+		if (!connection) {
+
+			
+			std::cout << "MySQL object creation failed" << std::endl;
+			continue; // loop again
+
+		}
+
+		//Try to connect using that password
+		MYSQL* connect = mysql_real_connect(connection, "localhost", "root", password.c_str(), nullptr, 0, nullptr, 0);
+
+
+		// did the connection work
+		if (connect) {
+
+			mysql_close(connection);
+			passwordDB = password;
+			break;
+		}
+		else {
+			// FAILURE — wrong password
+			std::cout << "Error: Incorrect password. Try again." << std::endl;
+			mysql_close(connection);
+
+
+		}
+
+
+	}
+
+
+}
 
 
