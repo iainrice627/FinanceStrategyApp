@@ -186,16 +186,20 @@ std::string Validation::ValidGenerateStockID(std::string stockID, Portfolio& por
 
 	std::smatch match;
 
-	bool found;
+	bool found = false;
 
+
+	//check the stock entered is a stock in our portfolio. 
 	for (int i = 0; i < portfolio.GetSizePortfolio(); ++i) {
 
 		if (stockID == (portfolio.GetPortfolioStocks())->stockID) {
 			
 			found = true;
 		}
+		
 
 	}
+
 
 
 
@@ -237,7 +241,12 @@ std::string  Validation::ValidDateString(std::string formattedTime) {
 			throw std::runtime_error("Date format is invalid.Correct example version = 30/04/2026");
 		}
 		
-		
+	//if the first 2 characters of the date string are above 31 then not OK
+	// if the first 2 characters are above 29 if the second two characters equal 02 - not ok
+	// if the first 2 character are 29 when the second set are 02 and the last four characters are not in a leap year.  
+	// if the months of april, june, september have first two charcters above 30 then not ok
+	// if the last four characters are above the current year then not ok.	
+
 	return formattedTime;
 
 	//does not check 32 days or 15months or years in the past or future

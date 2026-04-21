@@ -264,11 +264,18 @@ void Portfolio::SellLatest(std::string chosenStock, double newStockPrice)
 	for (int i = 0; i < size; ++i) {
 
 		if (portfolio_stocks[i].name == chosenStock) {
-			
+
 			Stock stock = portfolio_stocks[i];
 			stocksIndices.push(i);
 			stock.current_value = newStockPrice;
 		}
+		else if (portfolio_stocks[i].name != chosenStock) {
+
+			//we  dont own the stock entered so cannot sell.
+			std::cout << "You do not own any " << chosenStock << ". Nothing to sell." << std::endl;
+			return;
+		}
+
 	}
 
 	int index;
