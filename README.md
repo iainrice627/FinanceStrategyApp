@@ -2,7 +2,7 @@
 
 This is another university assignment using C++.  The task was to use Stacks and Queues and a simple Data Array to manage 'Stock's.  Essentially objects with values weer kept in a class array. 
 The program presents a menu with choices. The main feature of the app is to chnage the value of the stock, and depending on that input call on some actions such as buy and sell stocks.  
-There are other features such as viewing the portfolio of all the stocks the user owns, viewing details aof a specifc stock, and testing a strategy without making permanent changes.
+There are other features such as viewing the portfolio of all the stocks the user owns, viewing details a of a specifc stock, and testing a strategy without making permanent changes.
 
 The queues and stacks are templates so they can be used for different types of objects or types of variables. There are further features and alternative interpretations of the assignment that have been added to this versino.
 Each portfolio belongs to an individual cleint so only stocks that belong to the client are loaded into the program for th user to see. the user need to select the client at the start of the program. 
